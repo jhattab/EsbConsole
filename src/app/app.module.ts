@@ -1,20 +1,24 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import {BsDropdownModule} from "ngx-bootstrap";
+import { AdminComponent } from './admin/admin.component';
+import { BatchComponent } from './admin/batch/batch.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent
+    DashboardComponent,
+    AdminComponent,
+    BatchComponent
   ],
   imports: [
+    NgbModule.forRoot(),
     BrowserModule,
-    AppRoutingModule,
-    BsDropdownModule.forRoot()
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
