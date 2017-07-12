@@ -7,24 +7,22 @@
         <a class="nav-link" routerLink="/dashboard">Dashboard</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" [class.active]="this.router.url.startsWith('/search')" routerLink="/search">Recherche</a>
+        <a class="nav-link" [class.active]="this.router.url.startsWith('/audit')" routerLink="/audit">Audit avancé</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="this.router.url.startsWith('/jms')" routerLink="/jms">JMS Synthèse</a>
       </li>
       <li class="nav-item" [class.active]="this.router.url.startsWith('/admin')" ngbDropdown>
-        <a ngbDropdownToggle class="nav-link dropdown-toggle" [class.disabled]="this.admin.disabled" 
-        routerLink="/admin">Admin</a>
+        <a ngbDropdownToggle class="nav-link dropdown-toggle" [class.disabled]="this.admin.disabled" routerLink="/admin">Admin</a>
         <div class="dropdown-menu">
-        <li><a class="dropdown-item" routerLink="/admin/batch">batch</a></li>
-      </div>
+          <li><a class="dropdown-item" routerLink="/admin/batch">batch</a></li>
+        </div>
       </li>
     </ul>
-    <div class="btn-group" ngbDropdown>
-      <button ngbDropdownToggle type="button" class="btn btn-secondary dropdown-toggle">
-        User (username) <span class="caret"></span>
-      </button>
-      <div class="dropdown-menu">
-        <li><a class="dropdown-item" routerLink="logout">Logout</a></li>
-      </div>
-    </div>
+    <select class="custom-select">
+  <option selected>Intégration</option>
+  <option value="2">Validation</option>
+</select>
   </div>
 </nav>
 

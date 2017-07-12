@@ -7,13 +7,17 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AdminComponent } from './admin/admin.component';
 import { BatchComponent } from './admin/batch/batch.component';
+import { AuditComponent } from './audit/audit.component';
+import { JmsSyntheseComponent } from './jms-synthese/jms-synthese.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     AdminComponent,
-    BatchComponent
+    BatchComponent,
+    AuditComponent,
+    JmsSyntheseComponent
   ],
   imports: [
     NgbModule.forRoot(),
