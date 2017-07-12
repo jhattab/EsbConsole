@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Jobs } from './model/jobs';
 
 @Component({
   selector: 'app-batch',
@@ -9,7 +10,13 @@ export class BatchComponent implements OnInit {
 
   constructor() { }
 
+  private _jobs: Jobs[] = [];
+
   ngOnInit() {
+  }
+
+  public get jobs(): Jobs[] {
+    return this._jobs;
   }
 
 }
