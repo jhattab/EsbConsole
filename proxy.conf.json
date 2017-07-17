@@ -1,0 +1,6 @@
+{
+  "/outils/esb-console/*": {
+    "target": "http://localhost:43210",
+    "secure": false
+  }
+}

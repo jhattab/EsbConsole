@@ -10,15 +10,26 @@ import { JmsSyntheseComponent } from './jms-synthese/jms-synthese.component';
 import { AdminComponent } from './admin/admin.component';
 import { BatchComponent } from './admin/batch/batch.component';
 
+import { NotFoundComponent } from './not-found/not-found.component';
+
 const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'audit', component: AuditComponent },
-  { path: 'jms', component: JmsSyntheseComponent },
-  { path: 'admin', children: [
-    {path:'', component: BatchComponent },
-    {path:'batch', component: BatchComponent }
-  ]}
+  {
+    path: '',
+    component: DashboardComponent,
+    children : [
+      {path: '', component: DashboardComponent},
+      { path: '404', component: NotFoundComponent },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'audit', component: AuditComponent },
+      { path: 'jms', component: JmsSyntheseComponent },
+      { path: 'admin', children: [
+        { path:'', component: AdminComponent },
+        { path:'batch', component: BatchComponent }
+      ]},
+      { path: '**', redirectTo: '/404', pathMatch: 'full' }
+    ]
+  },
+
 ];
 
 @NgModule({

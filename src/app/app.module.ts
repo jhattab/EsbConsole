@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
+import { NgHttpLoaderModule } from 'ng-http-loader/ng-http-loader.module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,6 +13,9 @@ import { AuditComponent } from './audit/audit.component';
 import { JmsSyntheseComponent } from './jms-synthese/jms-synthese.component';
 
 import { JobService } from './admin/batch/job.service';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { HttpServiceService } from "./http-service.service";
+
 
 @NgModule({
   declarations: [
@@ -20,15 +24,18 @@ import { JobService } from './admin/batch/job.service';
     AdminComponent,
     BatchComponent,
     AuditComponent,
-    JmsSyntheseComponent
+    JmsSyntheseComponent,
+    NotFoundComponent
   ],
   imports: [
     NgbModule.forRoot(),
+    NgHttpLoaderModule,
     BrowserModule,
     AppRoutingModule,
-    HttpModule
+    HttpClientModule
   ],
   providers: [
+    HttpServiceService,
     JobService
   ],
   bootstrap: [AppComponent]
