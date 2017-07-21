@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Jobs } from "./model/jobs";
+import { Job } from "./model/job";
+import { Instance } from "./model/instance";
 import { HttpClient } from "@angular/common/http";
 
 @Injectable()
@@ -11,9 +12,31 @@ export class JobService {
   constructor(private http: HttpClient) {
   }
 
-  getdefinition(): Observable<Jobs[]> {
+  getdefinition(): Observable<Job[]> {
     return this.http
       .get(this.baseApi + '/definitions')
+      .catch(this.fail);
+  }
+
+  getInstance(): Observable<Instance[]> {
+    return this.http
+      .get(this.baseApi + '/instances')
+      .catch(this.fail);
+  }
+
+  cleanupAll() {
+    return this.http
+      .post(this.baseApi + '/cleanupAll', null)
+      .catch(this.fail);
+  }
+
+  startJob(batchToStart: string, envId: string):Observable<any> {
+    let jobParam = [
+      { name: 'envId', value: envId, type: 'String' },
+      { name: 'envName', value: 'Intégration', type: 'String' }
+    ];
+    return this.http
+      .post(this.baseApi + '/start?name=' + batchToStart, jobParam)
       .catch(this.fail);
   }
 
@@ -21,4 +44,6 @@ export class JobService {
     console.log(err);
     return Observable.throw(err);
   }
+
+
 }

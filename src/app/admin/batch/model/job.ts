@@ -1,4 +1,4 @@
-export class Jobs {
+export class Job {
     constructor(private _name: string,
                 private _executionCount: string,
                 private _launchable: string,

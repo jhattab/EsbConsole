@@ -16,7 +16,6 @@ import { JobService } from './admin/batch/job.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { HttpServiceService } from "./http-service.service";
 
-
 @NgModule({
   declarations: [
     AppComponent,

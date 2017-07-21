@@ -1,14 +1,109 @@
-<h1>Batch Jobs</h1>
-<p class="index-page--subtitle"> This section lists all
-  available batch jobs deployed with this instance of Spring Batch Admin.
-</p>
-<div id="batch-jobs" class="tab-pane active col-md-12">
-  <table ng-table="tableParams" class="table">
-    <tr *ngFor="let job of this.jobs">
-      <td data-title="'Name'" class="text-center">{{job.name}}</td>
-      <td data-title="'Execution Count'" class="text-center">{{job.executionCount}}</td>
-      <td data-title="'Launchable'" class="text-center">{{job.launchable}}</td>
-      <td data-title="'Incrementable'" class="text-center">{{job.incrementable}}</td>
-    </tr>
-  </table>
-</div>
+<legend>Gestion des batches</legend>
+
+<ngb-tabset>
+  <ngb-tab title="Log d'exécution">
+    <ng-template ngbTabContent>
+      <div style="margin-top: 5px">
+        <form class="form-inline" style="margin-bottom: 5px">
+          <button title="Tout ouvrir" class="btn btn-sm mb-2 mr-sm-2 mb-sm-0" (click)="this.expandAll()"><i class="fa fa-expand" aria-hidden="true"></i></button>
+          <button title="Tout fermer" class="btn btn-sm mb-2 mr-sm-2 mb-sm-0" (click)="this.collapseAll()"><i class="fa fa-compress" aria-hidden="true"></i></button>
+
+          <div class="btn-group mb-2 mr-sm-2 mb-sm-0">
+            <button title="Relancer les batches en erreur" class="btn btn-sm btn-warning" (click)="this.resumeAll()"><i class="fa fa-repeat"></i> Relancer erreurs</button>
+            <button title="Purger les batches en erreur, abandonnés ou terminés" class="btn btn-sm btn-danger" (click)="this.cleanupAll()"><i class="fa fa-trash"></i> Purger</button>
+          </div>
+
+          <div class="form-check mb-2 mr-sm-2 mb-sm-0">
+            <label class="form-check-label">
+              <input type="checkbox" name="autoExtendCheckbox" class="form-check-input" model="vm.treeState['autoExtend']">
+              Ouverture automatique
+            </label>
+          </div>
+          <div class="form-check mb-2 mr-sm-2 mb-sm-0">
+            <label class="form-check-label">
+              <input type="checkbox" name="autoExtendCheckbox" class="form-check-input" model="vm.treeState['autoExtend']">
+              Voir les jobs automatiques
+            </label>
+          </div>
+        </form>
+
+        <table class="table table-hover table-sm">
+          <thead>
+          <tr class="table-success">
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Etat</th>
+            <th>Début</th>
+            <th>Fin</th>
+            <th>Durée</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tr *ngIf="!this.instances.length">
+            <td colspan="3" class="text-center"><em>(il n'y a aucune instance de job)</em></td>
+          </tr>
+          <tr *ngFor="let node of this.instances" [class.table-danger]="node.status == 'FAILED'">
+            <td>{{node.id}}</td>
+            <td>{{node.name}}</td>
+            <td>{{node.status}}</td>
+            <td>{{node.children[0].startDate | date:'d.MM.yyyy HH:mm:ss'}}</td>
+            <td>{{node.children[0].endDate | date:'d.MM.yyyy HH:mm:ss'}}</td>
+            <td>{{node.children[0].time}}</td>
+            <td>
+              <div ng-if="currentUser.admin && node.depth == 0">
+                <button title="Relancer le job" class="btn btn-default btn-sm" ng-disabled="!this.isResumable(node)" (click)="this.resumeBatch(node.lastExecution.executionId, true)">
+                  <i class="fa fa-repeat"></i>
+                </button>
+                <button title="Supprimer le job" class="btn btn-danger btn-sm" ng-disabled="!this.isDeletable(node)" (click)="this.deleteInstance(node.instanceId)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title="Lancement">
+    <ng-template ngbTabContent>
+      <table class="table table-hover table-sm" style="margin-top: 5px">
+        <thead>
+        <tr class="table-success">
+          <th>Name</th>
+          <th>Description</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tr *ngIf="!this.jobs.length">
+          <td colspan="3" class="text-center"><em>(il n'y a aucun job)</em></td>
+        </tr>
+        <tr *ngFor="let job of this.jobs">
+          <td>{{job.name}}</td>
+          <td>{{job.description}}</td>
+          <td><button class="btn btn-sm btn-primary" (click)="this.openStartDialog(job)"><i class="fa fa-play-circle" aria-hidden="true"></i></button></td>
+        </tr>
+      </table>
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>
+
+<ng-template #startPopup let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <div class="alert alert-danger" *ngIf="this.error">
+      <p><strong>Erreur.</strong> Impossible de démarrer le batch à cause de l'erreur suivante:</p>
+      <em >{{this.error}}</em>
+    </div>
+    <h4 class="modal-title">Démarrage du batch : {{this.batchToStart.name}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Liste des environnements : 669de020-480d-4415-84db-3dd974e6b77b</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-sm btn-primary" *ngIf="!this.starting" (click)="this.startBatch()">Démarrer</button>
+    <button class="btn btn-sm btn-primary" *ngIf="this.starting" disabled>Démarrage...</button>
+    <button class="btn btn-sm" (click)="c()">Fermer</button>
+  </div>
+</ng-template>
