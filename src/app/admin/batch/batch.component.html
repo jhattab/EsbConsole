@@ -5,24 +5,14 @@
     <ng-template ngbTabContent>
       <div style="margin-top: 5px">
         <form class="form-inline" style="margin-bottom: 5px">
-          <button title="Tout ouvrir" class="btn btn-sm mb-2 mr-sm-2 mb-sm-0" (click)="this.expandAll()"><i class="fa fa-expand" aria-hidden="true"></i></button>
-          <button title="Tout fermer" class="btn btn-sm mb-2 mr-sm-2 mb-sm-0" (click)="this.collapseAll()"><i class="fa fa-compress" aria-hidden="true"></i></button>
-
           <div class="btn-group mb-2 mr-sm-2 mb-sm-0">
             <button title="Relancer les batches en erreur" class="btn btn-sm btn-warning" (click)="this.resumeAll()"><i class="fa fa-repeat"></i> Relancer erreurs</button>
             <button title="Purger les batches en erreur, abandonnés ou terminés" class="btn btn-sm btn-danger" (click)="this.cleanupAll()"><i class="fa fa-trash"></i> Purger</button>
           </div>
-
           <div class="form-check mb-2 mr-sm-2 mb-sm-0">
             <label class="form-check-label">
-              <input type="checkbox" name="autoExtendCheckbox" class="form-check-input" model="vm.treeState['autoExtend']">
-              Ouverture automatique
-            </label>
-          </div>
-          <div class="form-check mb-2 mr-sm-2 mb-sm-0">
-            <label class="form-check-label">
-              <input type="checkbox" name="autoExtendCheckbox" class="form-check-input" model="vm.treeState['autoExtend']">
-              Voir les jobs automatiques
+              <input type="checkbox" name="autoExtendCheckbox" class="form-check-input" (change)="this.refresh($event.target.checked)">
+              Refresh Automatique
             </label>
           </div>
         </form>
@@ -51,12 +41,20 @@
             <td>{{node.children[0].time}}</td>
             <td>
               <div ng-if="currentUser.admin && node.depth == 0">
-                <button title="Relancer le job" class="btn btn-default btn-sm" ng-disabled="!this.isResumable(node)" (click)="this.resumeBatch(node.lastExecution.executionId, true)">
-                  <i class="fa fa-repeat"></i>
-                </button>
-                <button title="Supprimer le job" class="btn btn-danger btn-sm" ng-disabled="!this.isDeletable(node)" (click)="this.deleteInstance(node.instanceId)">
-                  <i class="fa fa-trash"></i>
-                </button>
+                <div class="btn-group mb-2 mr-sm-2 mb-sm-0">
+                  <button title="Stopper le job" class="btn btn-warning btn-sm" [disabled]="!this.isAbortable(node.lastExecution)" *ngIf="!this.isAbandonnable(node.lastExecution)" (click)="this.abortBatch(node.lastExecution.executionId)">
+                    <i class="fa fa-hand-paper-o"></i>
+                  </button>
+                  <button title="Abandonner le job" class="btn btn-warning btn-sm" *ngIf="this.isAbandonnable(node.lastExecution)" (click)="this.abandonBatch(node.lastExecution.executionId)">
+                    <i class="fa fa-ban"></i>
+                  </button>
+                  <button title="Relancer le job" class="btn btn-default btn-sm" [disabled]="!this.isResumable(node)" (click)="this.resumeBatch(node.lastExecution.executionId, true)">
+                    <i class="fa fa-repeat"></i>
+                  </button>
+                  <button title="Supprimer le job" class="btn btn-danger btn-sm" [disabled]="!this.isDeletable(node)" (click)="this.deleteInstance(node.instanceId)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </div>
               </div>
             </td>
           </tr>

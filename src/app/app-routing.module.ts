@@ -9,8 +9,10 @@ import { JmsSyntheseComponent } from './jms-synthese/jms-synthese.component';
 
 import { AdminComponent } from './admin/admin.component';
 import { BatchComponent } from './admin/batch/batch.component';
+import { IndexComponent } from './admin/index/index.component';
 
 import { NotFoundComponent } from './not-found/not-found.component';
+
 
 const routes: Routes = [
   {
@@ -24,7 +26,8 @@ const routes: Routes = [
       { path: 'jms', component: JmsSyntheseComponent },
       { path: 'admin', children: [
         { path:'', component: AdminComponent },
-        { path:'batch', component: BatchComponent }
+        { path:'batch', component: BatchComponent },
+        { path:'index', component: IndexComponent }
       ]},
       { path: '**', redirectTo: '/404', pathMatch: 'full' }
     ]

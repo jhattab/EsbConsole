@@ -40,10 +40,27 @@ export class JobService {
       .catch(this.fail);
   }
 
+  resumeBatch(exId: number): Observable<any> {
+    return this.http
+      .post(this.baseApi + '/resume?id=' + exId, null)
+      .catch(this.fail);
+  }
+
+  abortBatch(exId: number): Observable<any> {
+    return this.http
+      .post(this.baseApi + '/abort?id=' + exId, null)
+      .catch(this.fail);
+  }
+
+  deleteInstance(exId: number): Observable<any> {
+    return this.http
+      .post(this.baseApi + '/delete?id=' + exId, null)
+      .catch(this.fail);
+  }
+
   private fail(err: any): Observable<any> {
     console.log(err);
     return Observable.throw(err);
   }
-
 
 }

@@ -15,6 +15,7 @@ import { JmsSyntheseComponent } from './jms-synthese/jms-synthese.component';
 import { JobService } from './admin/batch/job.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { HttpServiceService } from "./http-service.service";
+import { IndexComponent } from './admin/index/index.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { HttpServiceService } from "./http-service.service";
     BatchComponent,
     AuditComponent,
     JmsSyntheseComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    IndexComponent
   ],
   imports: [
     NgbModule.forRoot(),

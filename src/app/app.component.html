@@ -16,23 +16,18 @@
       <li class="nav-item" [class.active]="this.router.url.startsWith('/admin')" ngbDropdown>
         <a ngbDropdownToggle class="nav-link dropdown-toggle" [class.disabled]="this.admin.disabled" routerLink="/admin">Admin</a>
         <div class="dropdown-menu">
-          <li><a class="dropdown-item" routerLink="/admin/batch">batch</a></li>
+            <li><a class="dropdown-item" routerLink="/admin/batch">Batch</a></li>
+            <li><a class="dropdown-item" routerLink="/admin/index">Index</a></li>
         </div>
       </li>
     </ul>
     <select class="custom-select">
-  <option selected>Intégration</option>
-  <option value="2">Validation</option>
-</select>
+      <option selected>Intégration</option>
+      <option value="2">Validation</option>
+    </select>
   </div>
 </nav>
 
 <div class="container-fluid">
   <router-outlet></router-outlet>
 </div>
-
-<footer class="footer container-fluid">
-  <div>
-    <span class="text-muted">Place sticky footer content here.</span>
-  </div>
-</footer>
